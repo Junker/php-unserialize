@@ -1,4 +1,4 @@
-# PHP-UnserializeAA
+# PHP-Unserialize
 
 Common Lisp system for parsing PHP-serialized data. 
 
