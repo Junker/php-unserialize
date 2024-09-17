@@ -84,7 +84,7 @@
                        name
                        (loop :for (key value) :on items :by #'cddr
                              :collect (cons (%prepare-key key)
-                                            value))))))))
+                                            value)))))))
 
 (defun .php-array ()
   (.let* ((_ (.string= "a:"))
