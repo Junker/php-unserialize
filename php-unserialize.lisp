@@ -46,6 +46,12 @@
         (.char= #\;)
         (.identity nil)))
 
+(defun .php-reference ()
+  (.let* ((_ (.or (.string= "r:") (.string= "R:")))
+          (ref (.decimal))
+          (_ (.char= #\;)))
+    (.identity (list :reference ref))))
+
 (defun .php-string ()
   (.let* ((_ (.string= "s:"))
           (len (.decimal)))
@@ -60,7 +66,6 @@
        (.map 'list (.php-value))
        (.identity nil))
    (.string= "}")))
-
 
 (defun .php-object ()
   (.let* ((_ (.string= "O:"))
@@ -96,7 +101,8 @@
        (.php-string)
        (.php-null)
        (.php-object)
-       (.php-array)))
+       (.php-array)
+       (.php-reference)))
 
 (defun parse (str)
   (smug:parse (.map 'list (.php-value)) str))

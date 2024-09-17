@@ -20,6 +20,10 @@ This system can be installed from [UltraLisp](https://ultralisp.org/) like this:
 ;;      (3 (0 . T) (1 . 2.31) (2 :OBJECT "personClass" (("age" . 12))))))
 ```
 
+## Caveats
+
+- References not supported yet
+
 ## Documentation
 
 - [Wiki: PHP serialization format](https://en.wikipedia.org/wiki/PHP_serialization_format)
