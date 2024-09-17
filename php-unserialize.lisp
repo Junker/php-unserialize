@@ -53,6 +53,15 @@
             (.make-string len)
             (.string= "\";"))))
 
+(defun .php-items (len)
+  (.prog2
+   (.string= "{")
+   (if (> len 0)
+       (.map 'list (.php-value))
+       (.identity nil))
+   (.string= "}")))
+
+
 (defun .php-object ()
   (.let* ((_ (.string= "O:"))
           (name-len (.decimal))
@@ -60,21 +69,23 @@
           (name (.make-string name-len))
           (_ (.string= "\":"))
           (len (.decimal))
-          (_ (.string= ":{"))
-          (items (if (> len 0)
-                     (.map 'list (.php-value))
-                     (.identity nil)))
-          (_ (.string= "}")))
-    (.identity (list :object name items))))
+          (_ (.string= ":"))
+          (items (.php-items len)))
+    (flet ((%prepare-key (key)
+             (if (stringp key)
+                 (substitute #\@ #\Nul key)
+                 key)))
+      (.identity (list :object
+                       name
+                       (loop :for (key value) :on items :by #'cddr
+                             :collect (cons (%prepare-key key)
+                                            value))))))))
 
 (defun .php-array ()
   (.let* ((_ (.string= "a:"))
           (len (.decimal))
-          (_ (.string= ":{"))
-          (items (if (> len 0)
-                     (.map 'list (.php-value))
-                     (.identity nil)))
-          (_ (.string= "}")))
+          (_ (.string= ":"))
+          (items (.php-items len)))
     (.identity (loop :for (key value) :on items :by #'cddr
                      :collect (cons key value)))))
 
