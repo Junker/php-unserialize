@@ -59,17 +59,21 @@
           (_ (.string= ":\""))
           (name (.make-string name-len))
           (_ (.string= "\":"))
-          (_ (.decimal)) ; len
+          (len (.decimal))
           (_ (.string= ":{"))
-          (items (.map 'list (.php-value)))
+          (items (if (> len 0)
+                     (.map 'list (.php-value))
+                     (.identity nil)))
           (_ (.string= "}")))
     (.identity (list :object name items))))
 
 (defun .php-array ()
   (.let* ((_ (.string= "a:"))
-          (_ (.decimal)) ; len
+          (len (.decimal))
           (_ (.string= ":{"))
-          (items (.map 'list (.php-value)))
+          (items (if (> len 0)
+                     (.map 'list (.php-value))
+                     (.identity nil)))
           (_ (.string= "}")))
     (.identity (loop :for (key value) :on items :by #'cddr
                      :collect (cons key value)))))
