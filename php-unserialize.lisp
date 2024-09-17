@@ -37,9 +37,9 @@
   (.let* ((_ (.string= "d:"))
           (part1 (.signed-decimal))
           (_ (.char= #\.))
-          (part2 (.decimal))
+          (part2 (.map 'string (.is #'digit-char-p)))
           (_ (.char= #\;)))
-    (.identity (parse-float (format nil "~A.~A" part1 part2)))))
+    (.identity (parse-float (format nil "~D.~A" part1 part2)))))
 
 (defun .php-null ()
   (.and (.string= "N")
